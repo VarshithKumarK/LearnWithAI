@@ -1,14 +1,26 @@
 import LearningPath from '../models/LearningPath.js';
 import { generateRoadmapFromAI, updateRoadmapWithAI } from '../services/mlService.js';
+import { updateUserStreak } from '../services/streakService.js';
 
-export const generateRoadmap = async (req, res) => {
+export const generateDraftRoadmap = async (req, res) => {
   try {
     const { goal, skillLevel, timeAvailability } = req.body;
-    console.log('[NODE BACKEND -> generateRoadmap] Received request body:', req.body);
+    console.log('[NODE BACKEND -> generateDraftRoadmap] Received request body:', req.body);
     
     // Call AI Service
     const milestones = await generateRoadmapFromAI(goal, skillLevel, timeAvailability);
 
+    res.status(200).json({ goal, milestones, isDraft: true });
+  } catch (error) {
+    console.error('Generate Draft Roadmap Error:', error);
+    res.status(500).json({ message: 'Server error generating draft roadmap' });
+  }
+};
+
+export const saveRoadmap = async (req, res) => {
+  try {
+    const { goal, milestones } = req.body;
+    
     // Save to DB
     const learningPath = await LearningPath.create({
       userId: req.user._id,
@@ -17,11 +29,15 @@ export const generateRoadmap = async (req, res) => {
       progress: 0
     });
 
-    console.log('[NODE BACKEND -> generateRoadmap] Sending generated roadmap back to frontend:', learningPath);
+    console.log('[NODE BACKEND -> saveRoadmap] Saved roadmap to DB:', learningPath._id);
+    
+    // Update streak (fire-and-forget, don't block response)
+    updateUserStreak(req.user._id).catch(() => {});
+    
     res.status(201).json(learningPath);
   } catch (error) {
-    console.error('Generate Roadmap Error:', error);
-    res.status(500).json({ message: 'Server error generating roadmap' });
+    console.error('Save Roadmap Error:', error);
+    res.status(500).json({ message: 'Server error saving roadmap' });
   }
 };
 
@@ -66,5 +82,19 @@ export const updateRoadmapProgress = async (req, res) => {
   } catch (error) {
     console.error('Update Roadmap Error:', error);
     res.status(500).json({ message: 'Server error updating roadmap' });
+  }
+};
+
+export const deleteRoadmap = async (req, res) => {
+  try {
+    const roadmapId = req.params.id;
+    const deletedRoadmap = await LearningPath.findOneAndDelete({ _id: roadmapId, userId: req.user._id });
+    if (!deletedRoadmap) {
+      return res.status(404).json({ message: 'Roadmap not found or not authorized' });
+    }
+    res.json({ message: 'Roadmap deleted successfully' });
+  } catch (error) {
+    console.error('Delete Roadmap Error:', error);
+    res.status(500).json({ message: 'Server error deleting roadmap' });
   }
 };

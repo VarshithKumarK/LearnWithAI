@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { BrainCircuit, Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import { BrainCircuit, Mail, Lock, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -84,14 +85,21 @@ const Login = () => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 sm:text-sm border-slate-300 rounded-lg py-3 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 transition-colors"
+                  className="block w-full pl-10 pr-10 sm:text-sm border-slate-300 rounded-lg py-3 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 transition-colors"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 
@@ -132,7 +140,7 @@ const Login = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white text-slate-500">
-                New to PathAI?
+                New to LearnWithAI?
               </span>
             </div>
           </div>

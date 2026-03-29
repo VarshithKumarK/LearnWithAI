@@ -1,4 +1,6 @@
 import User from '../models/User.js';
+import Connection from '../models/Connection.js';
+import bcrypt from 'bcrypt';
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -14,17 +16,10 @@ export const getUserProfile = async (req, res) => {
 
 export const updateStreak = async (req, res) => {
   try {
+    const { updateUserStreak } = await import('../services/streakService.js');
+    await updateUserStreak(req.user._id);
+    
     const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    // Simple logic: if updated today, do nothing. If updated yesterday, +1. Else reset.
-    // For now, let's just increment by 1 for testing purposes.
-    user.streak += 1;
-    user.lastActive = Date.now();
-    await user.save();
-    
     res.json({ streak: user.streak, lastActive: user.lastActive });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -38,9 +33,18 @@ export const updateUserProfile = async (req, res) => {
     if (user) {
       user.name = req.body.name || user.name;
       
-      // Update contactInfo only if provided; if explicitly null/empty string, it's also updated.
       if (req.body.contactInfo !== undefined) {
         user.contactInfo = req.body.contactInfo;
+      }
+
+      // Update interests if provided
+      if (req.body.interests !== undefined) {
+        user.interests = req.body.interests;
+      }
+
+      // Update goals if provided
+      if (req.body.goals !== undefined) {
+        user.goals = req.body.goals;
       }
 
       if (req.body.password) {
@@ -57,6 +61,7 @@ export const updateUserProfile = async (req, res) => {
         contactInfo: updatedUser.contactInfo,
         streak: updatedUser.streak,
         interests: updatedUser.interests,
+        goals: updatedUser.goals,
         profilePic: updatedUser.profilePic,
       });
     } else {
@@ -86,5 +91,69 @@ export const uploadProfilePic = async (req, res) => {
   } catch (error) {
     console.error('Upload Error:', error);
     res.status(500).json({ message: 'Server error during upload' });
+  }
+};
+
+// --- Social Discovery ---
+
+export const searchUsers = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    const sanitized = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    const users = await User.find({
+      _id: { $ne: req.user._id },
+      $or: [
+        { name: { $regex: sanitized, $options: 'i' } },
+        { interests: { $regex: sanitized, $options: 'i' } },
+        { goals: { $regex: sanitized, $options: 'i' } },
+      ],
+    }).select('name interests goals profilePic streak lastActive');
+
+    res.json(users);
+  } catch (error) {
+    console.error('Search Error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    // Base fields to return
+    let selectFields = 'name interests goals streak lastActive profilePic';
+
+    // Check if there is an accepted connection between the requesting user and the target user
+    const acceptedConnection = await Connection.findOne({
+      status: 'accepted',
+      $or: [
+        { userId: req.user._id, targetUserId: req.params.id },
+        { userId: req.params.id, targetUserId: req.user._id },
+      ],
+    });
+
+    // If they are connected, also return contactInfo
+    if (acceptedConnection) {
+      selectFields += ' contactInfo';
+    }
+
+    const user = await User.findById(req.params.id).select(selectFields);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Add a flag so frontend knows whether contact info is available
+    const userData = user.toObject();
+    userData.isConnected = !!acceptedConnection;
+
+    res.json(userData);
+  } catch (error) {
+    console.error('Get User Error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };

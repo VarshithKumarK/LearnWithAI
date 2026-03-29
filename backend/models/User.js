@@ -26,7 +26,15 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    lastStreakDate: {
+      type: Date,
+      default: null,
+    },
     interests: {
+      type: [String],
+      default: [],
+    },
+    goals: {
       type: [String],
       default: [],
     },

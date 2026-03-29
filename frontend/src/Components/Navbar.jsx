@@ -23,7 +23,7 @@ const Navbar = () => {
           <div className="flex">
             <Link to="/" className="flex-shrink-0 flex items-center space-x-2 border-none ring-0 outline-none">
               <BrainCircuit className="h-8 w-8 text-indigo-600" />
-              <span className="font-bold text-xl tracking-tight text-slate-900">PathAI</span>
+              <span className="font-bold text-xl tracking-tight text-slate-900">LearnWithAI</span>
             </Link>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-4">

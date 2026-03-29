@@ -24,8 +24,8 @@ const Dashboard = () => {
     if (user) updateStreak();
   }, [user]);
 
-  const emailName = user?.email.split('@')[0] || 'User';
-  const capitalizedName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+  const displayName = user?.name || user?.email?.split('@')[0] || 'User';
+  const capitalizedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

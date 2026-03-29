@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Sparkles, Mail, Lock, ArrowRight, AlertCircle, User, Phone } from 'lucide-react';
+import { Sparkles, Mail, Lock, ArrowRight, AlertCircle, User, Phone, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
   const { register } = useContext(AuthContext);
@@ -9,6 +9,7 @@ const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [contactInfo, setContactInfo] = useState('');
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState('');
@@ -39,7 +40,7 @@ const Register = () => {
           Create an account
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Join PathAI and start generating intelligent learning roadmaps.
+          Join LearnWithAI and start generating intelligent learning roadmaps.
         </p>
       </div>
 
@@ -108,15 +109,22 @@ const Register = () => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   required
                   minLength="6"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 sm:text-sm border-slate-300 rounded-lg py-3 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 transition-colors"
+                  className="block w-full pl-10 pr-10 sm:text-sm border-slate-300 rounded-lg py-3 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 transition-colors"
                   placeholder="Min 6 characters"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
               <p className="mt-2 text-xs text-slate-500">
                 Must be at least 6 characters.
@@ -158,7 +166,7 @@ const Register = () => {
                 <label htmlFor="consent" className="font-medium text-slate-700">
                   Contact Consent
                 </label>
-                <p className="text-slate-500 text-xs">I agree to allow PathAI to store and use my contact information. If unchecked, contact information will not be saved.</p>
+                <p className="text-slate-500 text-xs">I agree to allow LearnWithAI to store and use my contact information. If unchecked, contact information will not be saved.</p>
               </div>
             </div>
 

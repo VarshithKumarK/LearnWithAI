@@ -1,5 +1,4 @@
 node_modules
-.env
 .DS_Store
 dist/
 backend/.env
@@ -8,5 +7,5 @@ ai-ml/.env
 ai-ml/.venv
 frontend/node_modules
 backend/node_modules
-
-
+ai-ml/models
+ai-ml/data

@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import agent, quiz
-
+from routes import agent, quiz, predictor, recommender
 app = FastAPI()
 
 app.add_middleware(
@@ -14,6 +13,8 @@ app.add_middleware(
 
 app.include_router(agent.router)
 app.include_router(quiz.router)
+app.include_router(predictor.router)
+app.include_router(recommender.router)
 
 @app.get("/")
 def read_root():

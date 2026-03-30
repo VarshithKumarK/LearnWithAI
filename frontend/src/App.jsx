@@ -14,6 +14,8 @@ import ResourceFinder from './Pages/ResourceFinder';
 import Social from './Pages/Social';
 import Profile from './Pages/Profile';
 import UserProfile from './Pages/UserProfile';
+import Predictor from './Pages/Predictor';
+import Recommender from './Pages/Recommender';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
                 <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/user/:id" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                <Route path="/predict" element={<ProtectedRoute><Predictor /></ProtectedRoute>} />
+                <Route path="/recommender" element={<ProtectedRoute><Recommender /></ProtectedRoute>} />
               </Routes>
             </main>
           </div>

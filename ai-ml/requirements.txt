@@ -5,3 +5,7 @@ langchain
 langgraph
 langchain-groq
 python-dotenv
+pandas
+scikit-learn
+joblib
+nltk

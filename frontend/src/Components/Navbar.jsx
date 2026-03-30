@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { BrainCircuit, LayoutDashboard, Map, HelpCircle, LogOut, BookOpen, Users } from 'lucide-react';
+import { BrainCircuit, LayoutDashboard, Map, HelpCircle, LogOut, BookOpen, Users, Activity, Sparkles } from 'lucide-react';
 import api from '../api';
 
 const Navbar = () => {
@@ -29,9 +29,7 @@ const Navbar = () => {
           <div className="flex items-center space-x-1 sm:space-x-4">
             {user ? (
               <>
-                <Link to="/dashboard" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1 transition-colors ${isActive('/dashboard') || isActive('/') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <LayoutDashboard className="h-4 w-4" /> <span className="hidden sm:inline">Dashboard</span>
-                </Link>
+
                 <Link to="/roadmap" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1 transition-colors ${isActive('/roadmap') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
                   <Map className="h-4 w-4" /> <span className="hidden sm:inline">Roadmap</span>
                 </Link>
@@ -43,6 +41,12 @@ const Navbar = () => {
                 </Link>
                 <Link to="/social" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1 transition-colors ${isActive('/social') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
                   <Users className="h-4 w-4" /> <span className="hidden lg:inline">Social</span>
+                </Link>
+                <Link to="/predict" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1 transition-colors ${isActive('/predict') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Activity className="h-4 w-4" /> <span className="hidden lg:inline">Predictor</span>
+                </Link>
+                <Link to="/recommender" className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-1 transition-colors ${isActive('/recommender') ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Sparkles className="h-4 w-4" /> <span className="hidden lg:inline">Discover</span>
                 </Link>
                 <div className="ml-4 border-l border-slate-200 h-6"></div>
                 <Link to="/profile" className="cursor-pointer relative group flex items-center transition-all">

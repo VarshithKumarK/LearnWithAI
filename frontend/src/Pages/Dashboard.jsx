@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api';
 import { Link } from 'react-router-dom';
-import { Flame, Compass, HelpCircle, BookOpen, Users, ArrowRight, Zap, Target } from 'lucide-react';
+import { Flame, Compass, HelpCircle, BookOpen, Users, ArrowRight, Zap, Target, Activity } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -119,6 +119,18 @@ const Dashboard = () => {
             <p className="text-slate-500 flex-grow">Connect with peers learning similar topics and study together.</p>
             <div className="mt-6 flex items-center text-rose-600 font-semibold text-sm">
               Meet peers <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          {/* Action 5 */}
+          <Link to="/predict" className="group bg-white rounded-3xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 flex flex-col h-full">
+            <div className="h-12 w-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Activity className="h-6 w-6" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Dropout Predictor</h3>
+            <p className="text-slate-500 flex-grow">Evaluate learning success and predict course completion using AI models.</p>
+            <div className="mt-6 flex items-center text-indigo-600 font-semibold text-sm">
+              Use Prediction Model <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 

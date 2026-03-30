@@ -9,6 +9,8 @@ import userRoutes from './routes/userRoutes.js';
 import connectionRoutes from './routes/connectionRoutes.js';
 import resourceRoutes from './routes/resourceRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
+import predictionRoutes from './routes/predictionRoutes.js';
+import recommenderRoutes from './routes/recommenderRoutes.js';
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/connections', connectionRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/prediction', predictionRoutes);
+app.use('/api/recommender', recommenderRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {
